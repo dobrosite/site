@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!-- Интерфейс к веб-серверу. -->
+        <service id="webserver" class="DobroSite\Site\WebServer\WebServer">
+            <factory service="webserver_factory" method="create"/>
+        </service>
+
+        <!-- Интерфейс к веб-серверу Apache. -->
+        <service id="webserver.apache" class="DobroSite\Site\WebServer\Apache\WebServer">
+            <argument>/etc/apache2</argument>
+            <argument>sites-available</argument>
+            <argument>sites-enabled</argument>
+        </service>
+
+        <!-- Фабрика интерфейсов к веб-серверу. -->
+        <service id="webserver_factory" class="DobroSite\Site\Service\WebServerFactory"
+                 public="false">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- Переводчик. -->
+        <service id="translator" class="Symfony\Component\Translation\Translator">
+            <argument>en_US</argument>
+            <call method="addLoader">
+                <argument>xliff</argument>
+                <argument type="service">
+                    <service class="Symfony\Component\Translation\Loader\XliffFileLoader"/>
+                </argument>
+            </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>resources/translations/messages.en.xliff</argument>
+                <argument>en_US</argument>
+            </call>
+            <call method="addResource">
+                <argument>xliff</argument>
+                <argument>resources/translations/messages.ru.xliff</argument>
+                <argument>ru_RU.UTF-8</argument>
+            </call>
+        </service>
+
+    </services>
+</container>
