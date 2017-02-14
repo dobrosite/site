@@ -1,0 +1,12 @@
+{
+    "git-version": "package_version",
+    "directories": [
+        "src",
+        "resources",
+        "vendor"
+    ],
+    "stub": true,
+    "main": "bin/main.php",
+    "output": "site.phar",
+    "chmod": "0755"
+}
